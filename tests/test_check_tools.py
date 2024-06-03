@@ -70,3 +70,11 @@ class Test_check_tools(unittest.TestCase):
         self.assertEqual(out_error, ans_error)
 
 
+    def test_rename_file(self):
+        current_path = os.path.dirname(os.path.abspath(__file__))
+        temp_path = os.path.join(current_path, 'temp')
+        os.chdir(temp_path)
+        config = [id, name, exp, docx]
+        src = {("202412340604",李四)}
+        out = rename_file("file1.txt", )
+

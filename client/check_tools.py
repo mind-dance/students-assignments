@@ -38,6 +38,7 @@ def read_id(files):
     return error_list, etc
 
 # 重命名文件
-def rename_file(target_file, config):
-    pass
+def rename_file(target_file, src, config):
+    correct_name = "-".join(config[:-1]).join(config[-1])
+    os.rename(target_file, correct_name)
 
