@@ -4,76 +4,81 @@ import sqlite3
 
 
 class Database():
-    def __init__(self):
+    def __init__(self, target_db = "database.db"):
         foo = os.getcwd()
-        db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"database.db")
+        db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), target_db)
         # 连接数据库
         self.con = sqlite3.connect(db_path)
         self.cur = self.con.cursor()
-        
-        
 
     # 导入学生名单
-    def import_s(self, csvfile, table = "students"):
+    def import_s(self, csvfile):
+        self.cur.execute("DELETE FROM students")
         # 打开文件
         with open(csvfile, 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             # 读取学生信息
             for row in reader:
                 # 插入数据库
-                self.cur.execute("INSERT INTO " + table + " (student_id, student_name) VALUES (?, ?)", \
+                self.cur.execute("INSERT INTO students (student_id, student_name) VALUES (?, ?)", \
                                  (row["student_id"], row["student_name"]))
             self.con.commit()
     
     # 导入作业布置情况
     def import_a(self, csvfile, table = "assignments"):
+        self.cur.execute("DELETE FROM " + table)
         with open(csvfile, 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 self.cur.execute("INSERT INTO " + table + " (assignment_id, teacher_id, assignment_name) VALUES (?, ?, ?)", \
-                                    row["assignment_id"], row["teacher_id"],row["assignment_name"])
+                                    (row["assignment_id"], row["teacher_id"], row["assignment_name"]))
             self.con.commit()
     
     # 导入作业提交情况
     def import_m(self, csvfile, table = "submits"):
+        self.cur.execute("DELETE FROM " + table)
         with open(csvfile, 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 self.cur.execute("INSERT INTO " + table + " (student_id, assignment_id, status) VALUES (?, ?, ?)", \
-                                    row["student_id"], row["assignment_id"],row["status"])
+                                    (row["student_id"], row["assignment_id"], row["status"]))
             self.con.commit()
     
     # 导入教师名单
     def import_t(self, csvfile, table = "teachers"):
+        self.cur.execute("DELETE FROM " + table)
         with open(csvfile, 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
                 self.cur.execute("INSERT INTO " + table + " (teacher_id, teacher_name) VALUES (?, ?)", \
-                                    row["teacher_id"], row["teacher_name"])
+                                    (row["teacher_id"], row["teacher_name"]))
             self.con.commit()
-
-
-
-
-    # 单个增加
-    def add_student(self, sid, sname, table = "students"):
-        self.cur.execute("INSERT INTO " + table + " (student_id, student_name) VALUES (?, ?)", sid, sname)
-        self.con.commit()
-    
+  
 
     # 增，学生作业提交情况，已交、缺交
-    def status():
+    def student_status(self):
         pass
+        
     # 删，删除某个学生
     
     # 修改学生信息
 
     # 查，所有学生
-    def load_students_data(self):
-        pass
+    def load_students_data(self, table = "students"):
+        s_set = set()
+        result = self.cur.execute("SELECT student_id FROM " + table)
+        for row in result:
+            s_set.add(row)
+        return s_set
+    
     # 查，作业提交情况
-    def assignments_status(self):
-        self.cur.execute("SELECT ")
+    # 本次实验X报告，应收A人，实收B人，缺交名单C
+    def assignments_status(self, assignment_id, table = {"a":"assignments", "s":"students"}):
+#         num = self.cur.execute("SELECT COUNT(student_id) FROM " + table["s"]).fetchone()
+#         SELECT student_id FROM assignments
+# WHERE assignment_id = 'DB20240101'
+# ;
+        # self.cur.execute("SELECT COUNT(?.student_id), FROM " + table["s"] + " JOIN ", table["assignments"])
         pass
 
     # 查，学生个人作业提交率

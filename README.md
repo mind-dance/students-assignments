@@ -37,6 +37,9 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+## 开发说明
+
+作业提交状态：0（done），1（miss）
 
 ## 参考文献
 

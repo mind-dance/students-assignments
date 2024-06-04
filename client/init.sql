@@ -26,11 +26,11 @@ CREATE TABLE "assignment" (
 	CONSTRAINT "0" FOREIGN KEY ("teacher_id") REFERENCES "teachers" ("teacher_id") ON UPDATE CASCADE ON DELETE NO ACTION
 )
 ;
--- 创建作业提交表
+-- 创建作业统计表
 CREATE TABLE "submits" (
 	"student_id" VARCHAR(50) NOT NULL,
 	"assignment_id" VARCHAR(50) NOT NULL,
-	"status" INTEGER NULL,
+	"status" INTEGER NULL DEFAULT '1',
 	CONSTRAINT "0" FOREIGN KEY ("assignment_id") REFERENCES "assignment" ("assignment_id") ON UPDATE CASCADE ON DELETE NO ACTION,
 	CONSTRAINT "1" FOREIGN KEY ("student_id") REFERENCES "students" ("student_id") ON UPDATE CASCADE ON DELETE NO ACTION
 )
