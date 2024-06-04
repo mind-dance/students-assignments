@@ -7,14 +7,17 @@ class Database():
         self.con = sqlite3.connect("client/database.db")
         self.cur = self.con.cursor()
 
-    # 批量增加
+    # 导入名单
     def import_students_data(self):
         pass
     # 单个增加
     def insert_student(self):
         pass
     # 增，学生作业提交情况，已交、缺交
+    def status():
+        pass
     # 删，删除某个学生
+    
     # 修改学生信息
 
     # 查，所有学生

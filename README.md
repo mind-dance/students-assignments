@@ -4,7 +4,7 @@
 
 本项目是数据库大作业（数据库课程设计）。本项目较为综合，包含了数据导入导出（csv和json）、数据库的连接、编写测试所需的测试用例，是本人目前（截止至2024年六一儿童节）最为复杂的项目之一（另一个是CS50x的tideman）。
 
-程序主入口为`app.py`。
+程序主入口为`app.py`。文件夹`ctrl`为控制层，`view`为前端，`data`为存储数据的模型层。
 
 有问题可以提issue，有优化可以提PR。
 
@@ -28,18 +28,22 @@ Python, Flask, SQLite
 
 ## 参考文献
 
+[Python文档库：os](https://docs.python.org/zh-cn/3/library/os.html)  
+
 [Python文档库：re](https://docs.python.org/zh-cn/3/library/re.html)  
 
-[Python文档库：json](https://docs.python.org/zh-cn/3/library/json.html)
+[Python文档库：csv](https://docs.python.org/zh-cn/3/library/csv.html)  
+
+[Python文档库：json](https://docs.python.org/zh-cn/3/library/json.html)  
+
+[Python文档库：open](https://docs.python.org/zh-cn/3/library/functions.html#open)
 
 [Python文档库：sqlite3](https://docs.python.org/zh-cn/3.9/library/sqlite3.html)  
 
-[Python文档库：os章节](https://docs.python.org/zh-cn/3/library/os.html)  
-
-[Python文档库：os.path章节](https://docs.python.org/zh-cn/3/library/os.path.html)  
+[Python文档库：os.path](https://docs.python.org/zh-cn/3/library/os.path.html)  
 
 [Python文档库：unittest](https://docs.python.org/zh-cn/3/library/unittest.html)  
 
-[unittest新手入门](https://www.bilibili.com/video/BV1sZ4y1i7nQ/)  
+[哔哩哔哩：unittest新手入门](https://www.bilibili.com/video/BV1sZ4y1i7nQ/)  
 
 [正则表达式测试网站：regex101](https://regex101.com/) 
