@@ -23,37 +23,37 @@ class Database():
                 self.cur.execute("INSERT INTO students (student_id, student_name) VALUES (?, ?)", \
                                  (row["student_id"], row["student_name"]))
             self.con.commit()
-    
-    # 导入作业布置情况
-    def import_a(self, csvfile, table = "assignments"):
-        self.cur.execute("DELETE FROM " + table)
+        # 导入教师名单
+    def import_t(self, csvfile):
+        self.cur.execute("DELETE FROM teachers")
         with open(csvfile, 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                self.cur.execute("INSERT INTO " + table + " (assignment_id, teacher_id, assignment_name) VALUES (?, ?, ?)", \
+                self.cur.execute("INSERT INTO teachers (teacher_id, teacher_name) VALUES (?, ?)", \
+                                    (row["teacher_id"], row["teacher_name"]))
+            self.con.commit()
+  
+    # 导入作业布置情况
+    def import_a(self, csvfile):
+        self.cur.execute("DELETE FROM assignments")
+        with open(csvfile, 'r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                self.cur.execute("INSERT INTO assignments (assignment_id, teacher_id, assignment_name) VALUES (?, ?, ?)", \
                                     (row["assignment_id"], row["teacher_id"], row["assignment_name"]))
             self.con.commit()
     
     # 导入作业提交情况
-    def import_m(self, csvfile, table = "submits"):
-        self.cur.execute("DELETE FROM " + table)
+    def import_m(self, csvfile):
+        self.cur.execute("DELETE FROM submits")
         with open(csvfile, 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                self.cur.execute("INSERT INTO " + table + " (student_id, assignment_id, status) VALUES (?, ?, ?)", \
+                self.cur.execute("INSERT INTO submits (student_id, assignment_id, status) VALUES (?, ?, ?)", \
                                     (row["student_id"], row["assignment_id"], row["status"]))
             self.con.commit()
     
-    # 导入教师名单
-    def import_t(self, csvfile, table = "teachers"):
-        self.cur.execute("DELETE FROM " + table)
-        with open(csvfile, 'r', encoding='utf-8') as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                self.cur.execute("INSERT INTO " + table + " (teacher_id, teacher_name) VALUES (?, ?)", \
-                                    (row["teacher_id"], row["teacher_name"]))
-            self.con.commit()
-  
+
 
     # 增，学生作业提交情况，已交、缺交
     def student_status(self):
