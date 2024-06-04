@@ -23,7 +23,8 @@ class Database():
                 self.cur.execute("INSERT INTO students (student_id, student_name) VALUES (?, ?)", \
                                  (row["student_id"], row["student_name"]))
             self.con.commit()
-        # 导入教师名单
+
+    # 导入教师名单
     def import_t(self, csvfile):
         self.cur.execute("DELETE FROM teachers")
         with open(csvfile, 'r', encoding='utf-8') as file:
@@ -49,8 +50,8 @@ class Database():
         with open(csvfile, 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
             for row in reader:
-                self.cur.execute("INSERT INTO submits (student_id, assignment_id, status) VALUES (?, ?, ?)", \
-                                    (row["student_id"], row["assignment_id"], row["status"]))
+                self.cur.execute("INSERT INTO submits (student_id, assignment_id) VALUES (?, ?)", \
+                                    (row["student_id"], row["assignment_id"]))
             self.con.commit()
     
 
@@ -73,12 +74,17 @@ class Database():
     
     # 查，作业提交情况
     # 本次实验X报告，应收A人，实收B人，缺交名单C
-    def assignments_status(self, assignment_id, table = {"a":"assignments", "s":"students"}):
-#         num = self.cur.execute("SELECT COUNT(student_id) FROM " + table["s"]).fetchone()
-#         SELECT student_id FROM assignments
-# WHERE assignment_id = 'DB20240101'
-# ;
-        # self.cur.execute("SELECT COUNT(?.student_id), FROM " + table["s"] + " JOIN ", table["assignments"])
-        pass
+    def submits_status(self, assignment_id):
+        smt_set = set()
+        # 查找所有交了作业的名单
+        smt = self.cur.execute("SELECT student_id FROM submits WHERE assignment_id = ?", assignment_id).fetchall()
+        # 查找所有学生
+        src = self.cur.execute("SELECT student_id FROM students").fetchall()
+        smt = {row[0] for row in smt}
+        src = {row[0] for row in src}
+        miss = src.difference(smt)
+        return miss
+
+        
 
     # 查，学生个人作业提交率
