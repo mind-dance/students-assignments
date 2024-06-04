@@ -58,7 +58,7 @@ def rename_file(target_file, src, config):
     new_name = '-'.join(parts) + '.docx'
     os.rename(target_file, new_name)
 
-# 示例用法
-src_data = {'student_id': '202412340603', 'name': '张三'}
-config = ['student_id', 'name']
-rename_file('old_file.txt', src_data, config)
+# # 示例用法
+# src_data = {'student_id': '202412340603', 'name': '张三'}
+# config = ['student_id', 'name']
+# rename_file('old_file.txt', src_data, config)

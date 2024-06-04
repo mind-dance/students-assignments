@@ -37,6 +37,7 @@ class Test_check_tools(unittest.TestCase):
         # 断言
         self.assertEqual(set(get_file), set(files))
     
+
     # 测试从文件名中读取学号
     def test_read_id(self):
         # 样例文件名列表
@@ -54,6 +55,8 @@ class Test_check_tools(unittest.TestCase):
         # 断言
         self.assertEqual(set(result),set(ans))
         self.assertEqual(set(etc),set(ans_etc))
+
+
     # 检查文件提交情况，可能有正常提交，缺交，未知的文件名
     def test_check_files(self):
         files = ["张三-实验1.docx", "李四-实验1.docx", "孙七-实验1.docx", "周八-实验1.docx"]
@@ -70,14 +73,14 @@ class Test_check_tools(unittest.TestCase):
         self.assertEqual(out_error, ans_error)
 
 
-    def test_generate_filenames(self):
-        current_path = os.path.dirname(os.path.abspath(__file__))
-        temp_path = os.path.join(current_path, 'temp')
-        os.chdir(temp_path)
-        config = [id, name, exp]
-        src = [{"student_id": "202412340604", "name": "李四", "exp":"实验1"},\
-               {"student_id": "202412340605", "name": "王五", "exp":"实验1"},\
-               {"student_id": "202412340606", "name": "赵六", "exp":"实验1"},
-               ]
-        out = rename_file("file1.txt", )
+    # def test_generate_filenames(self):
+    #     current_path = os.path.dirname(os.path.abspath(__file__))
+    #     temp_path = os.path.join(current_path, 'temp')
+    #     os.chdir(temp_path)
+    #     config = [id, name, exp]
+    #     src = [{"student_id": "202412340604", "name": "李四", "exp":"实验1"},\
+    #            {"student_id": "202412340605", "name": "王五", "exp":"实验1"},\
+    #            {"student_id": "202412340606", "name": "赵六", "exp":"实验1"},
+    #            ]
+    #     out = rename_file("file1.txt", )
 
