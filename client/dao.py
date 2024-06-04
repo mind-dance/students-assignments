@@ -15,7 +15,6 @@ class Database():
 
     # 导入学生名单
     def import_s(self, csvfile, table = "students"):
-        # try:
         # 打开文件
         with open(csvfile, 'r', encoding='utf-8') as file:
             reader = csv.DictReader(file)
@@ -25,51 +24,43 @@ class Database():
                 self.cur.execute("INSERT INTO " + table + " (student_id, student_name) VALUES (?, ?)", \
                                  (row["student_id"], row["student_name"]))
             self.con.commit()
-        # except:
-        #     print("打不开文件")
     
     # 导入作业布置情况
     def import_a(self, csvfile, table = "assignments"):
-        try:
-            with open(csvfile) as file:
-                reader = csv.DictReader(file)
-                for row in reader:
-                    self.cur.execute("INSERT INTO " + table + " (assignment_id, teacher_id, assignment_name) VALUES (?, ?, ?)", \
-                                     row["assignment_id"], row["teacher_id"],row["assignment_name"])
-                self.con.commit()
-        except:
-            pass
+        with open(csvfile, 'r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                self.cur.execute("INSERT INTO " + table + " (assignment_id, teacher_id, assignment_name) VALUES (?, ?, ?)", \
+                                    row["assignment_id"], row["teacher_id"],row["assignment_name"])
+            self.con.commit()
     
     # 导入作业提交情况
     def import_m(self, csvfile, table = "submits"):
-        try:
-            with open(csvfile) as file:
-                reader = csv.DictReader(file)
-                for row in reader:
-                    self.cur.execute("INSERT INTO " + table + " (student_id, assignment_id, status) VALUES (?, ?, ?)", \
-                                     row["student_id"], row["assignment_id"],row["status"])
-                self.con.commit()
-        except:
-            pass
+        with open(csvfile, 'r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                self.cur.execute("INSERT INTO " + table + " (student_id, assignment_id, status) VALUES (?, ?, ?)", \
+                                    row["student_id"], row["assignment_id"],row["status"])
+            self.con.commit()
     
     # 导入教师名单
     def import_t(self, csvfile, table = "teachers"):
-        try:
-            self.table_t = ["teacher_id", "teacher_name"]
-            with open(csvfile) as file:
-                reader = csv.DictReader(file)
-                for row in reader:
-                    self.cur.execute("INSERT INTO " + table + " (teacher_id, teacher_name) VALUES (?, ?)", \
-                                     row["teacher_id"], row["teacher_name"])
-                self.con.commit()
-        except:
-            pass
+        with open(csvfile, 'r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                self.cur.execute("INSERT INTO " + table + " (teacher_id, teacher_name) VALUES (?, ?)", \
+                                    row["teacher_id"], row["teacher_name"])
+            self.con.commit()
+
 
 
 
     # 单个增加
-    def insert_student(self):
-        pass
+    def add_student(self, sid, sname, table = "students"):
+        self.cur.execute("INSERT INTO " + table + " (student_id, student_name) VALUES (?, ?)", sid, sname)
+        self.con.commit()
+    
+
     # 增，学生作业提交情况，已交、缺交
     def status():
         pass
@@ -81,11 +72,8 @@ class Database():
     def load_students_data(self):
         pass
     # 查，作业提交情况
-    # 查，学生个人作业提交率
+    def assignments_status(self):
+        self.cur.execute("SELECT ")
+        pass
 
-# temp = cur.execute("SELECT student_id, name FROM students")
-# for row in temp:
-#     id, name = row
-#     print(id,name)
-# con.commit()
-# con.close()
+    # 查，学生个人作业提交率
