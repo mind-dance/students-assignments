@@ -67,14 +67,14 @@ class Database():
                                     (i, aid))
         
     # 查看所有学生
-    def load_s_data(self):
+    def get_s_data(self):
         s_dict = []
         result = self.cur.execute("SELECT student_id, student_name FROM students").fetchall()
         for row in result:
             s_dict.append({"sid":row[0],"sname":row[1]})
         return s_dict
     
-    def get_s_name(self, sid_list):
+    def get_s_dict(self, sid_list):
         '''根据学号查名字'''
         s_dict = []
         for i in sid_list:

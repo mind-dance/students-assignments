@@ -8,13 +8,12 @@ t = Tools()
 
 
 t.tid = "t2024003"
-t.aname = "抽卡时的心态管理"
-# aname = input("输入需要统计的作业名")
+t.aname = input("输入需要统计的作业名")
 
 # 需要统计的作业id
 t.aid = db.get_a_id(t.tid ,t.aname)
 # 学生名单
-s_dict = db.load_s_data()
+s_dict = db.get_s_data()
 config = ["sid", "sname", "aname"]
 # 加载文件列表
 abs_path = input("文件夹 :")
@@ -30,7 +29,7 @@ for row in bug_tuple:
     # 学号加入名单
     bug_sid_list.append(row[0])
 # 制作bug的学号字典
-bug_s_dict = db.get_s_name(bug_sid_list)
+bug_s_dict = db.get_s_dict(bug_sid_list)
 # 重命名
 t.rename_files(abs_path, bug_tuple, bug_s_dict, config)
 
