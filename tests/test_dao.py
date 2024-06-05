@@ -1,7 +1,7 @@
 from ctrl.dao import *
 import unittest
 
-class Test_import(unittest.TestCase):
+class Test_import_normal(unittest.TestCase):
     
     # 测试导入学生表
     def test_import_s(self):
@@ -68,7 +68,7 @@ class Test_import(unittest.TestCase):
         db.cur.execute("DROP TABLE submits")
 
 
-class Test_load(unittest.TestCase):
+class Test_load_normal(unittest.TestCase):
     def setUp(self):
         csv_path = os.path.dirname(os.path.abspath(__file__))
         self.csv_s = os.path.join(csv_path,"demo\\demo_students.csv")

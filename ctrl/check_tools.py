@@ -1,6 +1,5 @@
 import os
 import re
-import json
 
 class Tools():
     def __init__(self):
@@ -20,12 +19,15 @@ class Tools():
     
     def generate_files_list(self, src, config):
         '''生成应交作业名单，输入src列表，每个元素为字典。返回一个列表，用于判断正确提价的文件名'''
-        parts = []
+        std_list = []
         # 用于获取设置中的值
-        for i in config:
-            parts.append(src.get(i))
-        new_name = '-'.join(parts) + '.docx'
-        return
+        for row in src:
+            parts = []
+            for col in config:
+                parts.append(row.get(col))
+            new_name = '-'.join(parts) + '.docx'
+            std_list.append(new_name)
+        return std_list
 
     def check_files(self, files, std):
         '''比较已交文件夹中的文件与应交作业的名单，返回三个集合'''
@@ -49,7 +51,7 @@ class Tools():
                 etc.append(i)
         return error_list, etc
 
-    def rename_files(self,target_file, src,config):
+    def rename_files(self, target_file, src,config):
         '''重命名已识别但不正确的文件名'''
         parts = []
         for field in config:
