@@ -26,6 +26,15 @@ class Tools():
         # 返回所有文件名
         return files
     
+    # 提供文件名，获取完成作业的元组对
+    def get_m_tuple(self,done_set):
+        m_tuple = []
+        out, null = self.read_files_sid(done_set)
+        for row in out:
+            sid = row[0]
+            m_tuple.append((sid, self.aid))
+        return m_tuple
+
     def generate_files_list(self, s_dict, config):
         '''生成应交作业名单，输入s_dict列表，每个元素为字典。返回一个列表，用于判断正确提价的文件名'''
         std_list = []
@@ -51,7 +60,7 @@ class Tools():
         error = files.difference(std)
         return done, miss, error
 
-    def read_id_list(self, files):
+    def read_files_sid(self, files):
         '''尝试识别未识别的文件名'''
         cort_tuple = []
         etc = []

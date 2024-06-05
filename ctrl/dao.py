@@ -88,12 +88,15 @@ class Database():
         '''获取作业id'''
         aid = self.cur.execute("SELECT assignment_id FROM assignments WHERE teacher_id = ? AND assignment_name = ?",(tid,aname)).fetchone()
         return aid[0]
-    # 提交数据
-    def save_data(self):
+    
+    # 提交作业记录
+    def set_submits(self, m_tuple):
         '''保存作业提交记录'''
-        pass
+        for row in m_tuple:
+            self.cur.execute("INSERT INTO submits (student_id, assignment_id) VALUES (?, ?)", row)
+        self.con.commit()
 
-
+        
     # 本次实验X报告，应收A人，实收B人，缺交名单C
     def submits_status(self, assignment_id):
         smt_set = set()
