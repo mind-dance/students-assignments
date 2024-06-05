@@ -76,10 +76,12 @@ class Database():
     
     
     # 读取数据
-    def load_a_data(self, a_name):
+    def load_a_data(self, aid):
+        '''导入sid,sname,aname。供文件检测使用。'''
         pass
     # 提交数据
     def save_data(self):
+        '''保存作业提交记录'''
         pass
 
 
