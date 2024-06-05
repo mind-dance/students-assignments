@@ -16,5 +16,6 @@
             "name": "SA",
             "database": "${workspaceFolder:students-assignments}/client/database.db"
         }
-    ]
+    ],
+    "python.analysis.typeCheckingMode": "basic"
 }

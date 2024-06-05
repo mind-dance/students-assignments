@@ -87,13 +87,15 @@ pip install -r requirements.txt
 
 #### 获取文件名
 
-切换到作业所在位置。`check_tools.py`提供函数支持。`def get_all_file(abs_path)->list`接受一个绝对路径并查找路径中所有的文件名，返回一个列表。
+切换到作业所在位置。`check_tools.py`提供函数支持。`t.get_all_file(abs_path)`接受一个绝对路径并查找路径中所有的文件名，返回一个列表。
 
 #### 查找已提交作业
 
-数据库联查
+数据库联查s_id和a_title`d.load_data()`。 生成文件名名单`t.generate_filenames()`，比较文件`t.check_files()`。查找学生ID`t.read_id()`，修正文件名`t.rename_file()`。判断提交与缺交。
 
-作业提交状态：0（done），1（miss）
+#### 写入数据库
+
+将已提交的写入submits`d.save_data()`，未提交的记入字典保存。
 
 
 

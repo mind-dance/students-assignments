@@ -63,22 +63,6 @@ class Database():
             self.cur.execute("INSERT INTO submits (student_id, assignment_id) VALUES (?, ?)", \
                                     (i, aid))
         
-# -- 假设表名为 your_table，包含列 name
-# -- 要判断的条目 B 的值为 some_value
-
-# BEGIN TRANSACTION;
-
-# IF NOT EXISTS (SELECT 1 FROM submits WHERE student_id = ? AND assignment_id = ?) THEN
-#     INSERT INTO submits (name) VALUES ('some_value');
-# END IF;
-
-# COMMIT TRANSACTION;
-
-
-    # 删，删除某个学生
-    
-    # 修改学生信息
-
     # 查，所有学生
     def load_students_data(self, table = "students"):
         s_set = set()
@@ -86,6 +70,9 @@ class Database():
         for row in result:
             s_set.add(row)
         return s_set
+    # 
+    def load_a_data(self, a_name):
+        pass
     
     # 查，作业提交情况
     # 本次实验X报告，应收A人，实收B人，缺交名单C

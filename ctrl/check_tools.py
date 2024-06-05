@@ -2,63 +2,57 @@ import os
 import re
 import json
 
-
-# 获取当前目录下的所有文件名
-def get_all_file(abs_path)->list:
-    files = []
-    # 列出所有文件与子文件夹
-    dirs = os.listdir(abs_path)
-    # 过滤出文件
-    for item in dirs:
-        if os.path.isfile(os.path.join(abs_path, item)):
-            files.append(item)
-    # 返回所有文件名
-    return files
-
-# 生成命名列表
-def generate_filenames(src, config):
-    parts = []
-    for placeholder in config:
-        parts.append(src.get(placeholder))
-    new_name = '-'.join(parts) + '.docx'
-    return
-
-# 检查作业是否提交
-def check_files(files, src):
-    files = set(files)
-    src = set(src)
-    done = src.intersection(files)
-    miss = src.difference(files)
-    error = files.difference(src)
-    return done, miss, error
-
-# 读取文件名id
-def read_id(files):
-    error_list = []
-    etc = []
-    pat = re.compile(r"\d{12}")
-    for i in files:
-        id = re.findall(pat,i)
-        if id:
-            error_list.append((id[0],i))
-        else:
-            etc.append(i)
-    return error_list, etc
-
-# 重命名文件
-# def rename_file(target_file, src, config):
+class Tools():
+    def __init__(self):
+        pass
     
-#     correct_name = "-".join(config[:-1]).join(config[-1])
-#     os.rename(target_file, correct_name)
+    def get_all_file(self,abs_path):
+        '''获取目标目录的所有文件名'''
+        files = []
+        # 列出所有文件与子文件夹
+        dirs = os.listdir(abs_path)
+        # 过滤出文件
+        for item in dirs:
+            if os.path.isfile(os.path.join(abs_path, item)):
+                files.append(item)
+        # 返回所有文件名
+        return files
+    
+    def generate_files_list(self, src, config):
+        '''生成应交作业名单，输入src列表，每个元素为字典。返回一个列表，用于判断正确提价的文件名'''
+        parts = []
+        # 用于获取设置中的值
+        for i in config:
+            parts.append(src.get(i))
+        new_name = '-'.join(parts) + '.docx'
+        return
 
-def rename_file(target_file, src, config):
-    parts = []
-    for field in config:
-        parts.append(str(src.get(field)))
-    new_name = '-'.join(parts) + '.docx'
-    os.rename(target_file, new_name)
+    def check_files(self, files, std):
+        '''比较已交文件夹中的文件与应交作业的名单，返回三个集合'''
+        files = set(files)
+        std = set(std)
+        done = std.intersection(files)
+        miss = std.difference(files)
+        error = files.difference(std)
+        return done, miss, error
 
-# # 示例用法
-# src_data = {'student_id': '202412340603', 'name': '张三'}
-# config = ['student_id', 'name']
-# rename_file('old_file.txt', src_data, config)
+    def read_id_list(self, files):
+        '''尝试识别未识别的文件名'''
+        error_list = []
+        etc = []
+        pat = re.compile(r"\d{12}")
+        for i in files:
+            id = re.findall(pat,i)
+            if id:
+                error_list.append((id[0],i))
+            else:
+                etc.append(i)
+        return error_list, etc
+
+    def rename_files(self,target_file, src,config):
+        '''重命名已识别但不正确的文件名'''
+        parts = []
+        for field in config:
+            parts.append(str(src.get(field)))
+        new_name = '-'.join(parts) + '.docx'
+        os.rename(target_file, new_name)
