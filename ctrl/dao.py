@@ -83,7 +83,7 @@ class Database():
             s_dict.append({"sid":i,"sname":sname[0]})
         return s_dict
     
-    # 查看作业布置
+    # 获取作业id
     def get_a_id(self, tid, aname):
         '''获取作业id'''
         aid = self.cur.execute("SELECT assignment_id FROM assignments WHERE teacher_id = ? AND assignment_name = ?",(tid,aname)).fetchone()
