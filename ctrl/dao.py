@@ -5,8 +5,9 @@ import sqlite3
 
 class Database():
     def __init__(self, target_db = "database.db"):
-        foo = os.getcwd()
-        db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), target_db)
+        root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        data_path = os.path.join(root_path, "data")
+        db_path = os.path.join(data_path, target_db)
         # 连接数据库
         self.con = sqlite3.connect(db_path)
         self.cur = self.con.cursor()
