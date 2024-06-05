@@ -93,6 +93,8 @@ pip install -r requirements.txt
 
 数据库联查s_id和a_title`d.load_data()`。 生成文件名名单`t.generate_filenames()`，比较文件`t.check_files()`。查找学生ID`t.read_id()`，修正文件名`t.rename_file()`。判断提交与缺交。
 
+传入路径后，给出列表，根据id和破损文件名元组，生成争取文件名元组，将fix_list[i]替换src[i][0]
+
 #### 写入数据库
 
 将已提交的写入submits`d.save_data()`，未提交的记入字典保存。

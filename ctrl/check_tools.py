@@ -3,7 +3,10 @@ import re
 
 class Tools():
     def __init__(self):
-        pass
+        self.root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    def get_root(self):
+        return self.root_path
     
     def get_all_file(self,abs_path):
         '''获取目标目录的所有文件名'''
@@ -51,8 +54,12 @@ class Tools():
                 etc.append(i)
         return cort_list, etc
 
-    def rename_files(self, abs_path, src, config):
+    def rename_files(self, abs_path,bug_list, src_list, config):
         '''重命名已识别但不正确的文件名,src为识别成功准备重命名的列表，每个元素为元组，第一位为id，第二为文件名'''
-        
-        foo = self.generate_files_list(src, config)
-        # os.rename(, new_name)
+        # ans = [("202412340603", "202412340603-xxx-实验1.docx"), ("202412340604", "202412340604-李四-疯狂星期四.v50"), \
+        #        ("202412340605", "202412340605-王五-kfc"), ("202412340606", "202412340606-赵六-实验666.ppt")]
+        os.chdir(abs_path)
+        cort_list = self.generate_files_list(src_list, config)
+        for i in range(len(src_list)):
+            os.rename(bug_list[i], cort_list[i])
+        return 0

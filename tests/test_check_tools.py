@@ -8,17 +8,27 @@ from ctrl.check_tools import *
 class Test_Tools_normal(unittest.TestCase):
     def setUp(self):
         # 创建测试文件夹
-        os.chdir(os.path.dirname(os.path.abspath(__file__)))
+        self.tests_path = os.path.dirname(os.path.abspath(__file__))
+        os.chdir(self.tests_path)
         if os.path.exists("temp"):
             shutil.rmtree("temp")
         os.mkdir("temp")
+        self.demo_path = os.path.join(self.tests_path,"temp")
         # 实例化工具类
         self.t = Tools()
+        
 
     def tearDown(self):
         # 删除测试文件夹
         os.chdir(os.path.dirname(os.path.abspath(__file__)))
         shutil.rmtree("temp")
+
+    def create_files(self, abs_path, files):
+        os.chdir(abs_path)
+        for item in files:
+            with open(item, 'w') as f:
+                f.write('This is a test file.')
+
 
     def test_get_all_file(self):
         current_path = os.path.dirname(os.path.abspath(__file__))
@@ -39,7 +49,7 @@ class Test_Tools_normal(unittest.TestCase):
         # 断言
         self.assertEqual(set(get_file), set(files))
     
-    def test_generate_filenames(self):
+    def test_generate_files_list(self):
         ans = ['202412340101-骰子-实验1-日常生活中如何进攻一个村庄.docx', '202412340102-红中-实验1-日常生活中如何进攻一个村庄.docx', '202412340103-张三-实验1-日常生活中如何进攻一个村庄.docx']
         src = [{"sid":"202412340101","sname":"骰子","aname":"实验1-日常生活中如何进攻一个村庄"},\
                {"sid":"202412340102","sname":"红中","aname":"实验1-日常生活中如何进攻一个村庄"},\
@@ -85,25 +95,17 @@ class Test_Tools_normal(unittest.TestCase):
 
     # 测试批量重命名
     def test_rename_files(self):
-        src = [{"sid":"202412340101","sname":"骰子","aname":"实验1-日常生活中如何进攻一个村庄"},\
+        src_list = [{"sid":"202412340101","sname":"骰子","aname":"实验1-日常生活中如何进攻一个村庄"},\
                {"sid":"202412340102","sname":"红中","aname":"实验1-日常生活中如何进攻一个村庄"},\
                {"sid":"202412340103","sname":"张三","aname":"实验1-日常生活中如何进攻一个村庄"},\
                 ]
+        bug_list = ["202412340101_hahah_大疆军火！","202412340102——人工智障_嗨嗨嗨","噫好我中了！202412340103上课打卡理发店"]
         config = ["sid","sname","aname"]
-        
-        pass
-
-
-
-
-
-    # def test_generate_filenames(self):
-    #     current_path = os.path.dirname(os.path.abspath(__file__))
-    #     temp_path = os.path.join(current_path, 'temp')
-    #     os.chdir(temp_path)
-    #     config = [id, name, exp]
-    #     src = [{"student_id": "202412340604", "name": "李四", "exp":"实验1"},\
-    #            {"student_id": "202412340605", "name": "王五", "exp":"实验1"},\
-    #            {"student_id": "202412340606", "name": "赵六", "exp":"实验1"},
-    #            ]
-    #     out = rename_file("file1.txt", )
+        ans = {'202412340101-骰子-实验1-日常生活中如何进攻一个村庄.docx', '202412340102-红中-实验1-日常生活中如何进攻一个村庄.docx', '202412340103-张三-实验1-日常生活中如何进攻一个村庄.docx'}
+        abs_path = self.demo_path
+        # 批量创建文件
+        self.create_files(abs_path, bug_list)
+        self.t.rename_files(abs_path, bug_list, src_list, config)
+        out = set(self.t.get_all_file(abs_path))
+        # print(out)
+        self.assertEqual(out,ans)

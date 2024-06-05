@@ -5,11 +5,12 @@ import sqlite3
 
 class Database():
     def __init__(self, target_db = "database.db"):
-        root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        data_path = os.path.join(root_path, "data")
-        db_path = os.path.join(data_path, target_db)
+        # 获取项目的根目录，其他路径以此用相对目录传参
+        self.root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.data_path = os.path.join(self.root_path, "data")
+        self.db_path = os.path.join(self.data_path, target_db)
         # 连接数据库
-        self.con = sqlite3.connect(db_path)
+        self.con = sqlite3.connect(self.db_path)
         self.cur = self.con.cursor()
 
     # 导入学生名单
