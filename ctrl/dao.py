@@ -5,10 +5,11 @@ import sqlite3
 
 class Database():
     def __init__(self, target_db = "database.db"):
-        # 获取项目的根目录，其他路径以此用相对目录传参
+        # 获取项目的根目录，以及其他高频的相对路径
         self.root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.data_path = os.path.join(self.root_path, "data")
         self.db_path = os.path.join(self.data_path, target_db)
+        self.sql_path = os.path.join(self.data_path, "sql")
         # 连接数据库
         self.con = sqlite3.connect(self.db_path)
         self.cur = self.con.cursor()
