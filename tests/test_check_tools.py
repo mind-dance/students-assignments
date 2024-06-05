@@ -85,6 +85,12 @@ class Test_Tools_normal(unittest.TestCase):
 
     # 测试批量重命名
     def test_rename_files(self):
+        src = [{"sid":"202412340101","sname":"骰子","aname":"实验1-日常生活中如何进攻一个村庄"},\
+               {"sid":"202412340102","sname":"红中","aname":"实验1-日常生活中如何进攻一个村庄"},\
+               {"sid":"202412340103","sname":"张三","aname":"实验1-日常生活中如何进攻一个村庄"},\
+                ]
+        config = ["sid","sname","aname"]
+        
         pass
 
 

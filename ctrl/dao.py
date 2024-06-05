@@ -70,11 +70,16 @@ class Database():
         for row in result:
             s_set.add(row)
         return s_set
-    # 
+    
+    
+    # 读取数据
     def load_a_data(self, a_name):
         pass
-    
-    # 查，作业提交情况
+    # 提交数据
+    def save_data(self):
+        pass
+
+
     # 本次实验X报告，应收A人，实收B人，缺交名单C
     def submits_status(self, assignment_id):
         smt_set = set()
@@ -87,6 +92,3 @@ class Database():
         miss = src.difference(smt)
         return miss
 
-
-
-    # 查，学生个人作业提交率
