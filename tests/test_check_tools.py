@@ -45,7 +45,7 @@ class Test_Tools_normal(unittest.TestCase):
             with open(item, 'w') as f:
                 f.write('This is a test file.')
         # 测试函数
-        get_file = self.t.get_all_file(temp_path)
+        get_file = self.t.get_all_files(temp_path)
         # 断言
         self.assertEqual(set(get_file), set(files))
     
@@ -95,17 +95,23 @@ class Test_Tools_normal(unittest.TestCase):
 
     # 测试批量重命名
     def test_rename_files(self):
-        src_list = [{"sid":"202412340101","sname":"骰子","aname":"实验1-日常生活中如何进攻一个村庄"},\
-               {"sid":"202412340102","sname":"红中","aname":"实验1-日常生活中如何进攻一个村庄"},\
-               {"sid":"202412340103","sname":"张三","aname":"实验1-日常生活中如何进攻一个村庄"},\
+        self.t.aname = "抽卡时的心态管理"
+        s_dict = [{"sid":"202412340103","sname":"张三"},\
+               {"sid":"202412340104","sname":"李四"},\
+               {"sid":"202412340105","sname":"王五"},\
                 ]
-        bug_list = ["202412340101_hahah_大疆军火！","202412340102——人工智障_嗨嗨嗨","噫好我中了！202412340103上课打卡理发店"]
+        bug_tuple = [("202412340103","202412340103_hahah_大疆军火！"),\
+                    ("202412340104","202412340104——人工智障_嗨嗨嗨"),\
+                        ("202412340105","噫好我中了！202412340105上课打卡理发店")]
+        bug_list = []
+        for row in bug_tuple:
+            bug_list.append(row[1])
         config = ["sid","sname","aname"]
-        ans = {'202412340101-骰子-实验1-日常生活中如何进攻一个村庄.docx', '202412340102-红中-实验1-日常生活中如何进攻一个村庄.docx', '202412340103-张三-实验1-日常生活中如何进攻一个村庄.docx'}
+        ans = set(['202412340103-张三-抽卡时的心态管理.docx', '202412340104-李四-抽卡时的心态管理.docx', '202412340105-王五-抽卡时的心态管理.docx'])
         abs_path = self.demo_path
         # 批量创建文件
         self.create_files(abs_path, bug_list)
-        self.t.rename_files(abs_path, bug_list, src_list, config)
-        out = set(self.t.get_all_file(abs_path))
-        # print(out)
+        self.t.rename_files(abs_path, bug_tuple, s_dict, config)
+        out = set(self.t.get_all_files(abs_path))
+        print(out)
         self.assertEqual(out,ans)

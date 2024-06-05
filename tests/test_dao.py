@@ -87,5 +87,29 @@ class Test_load_normal(unittest.TestCase):
             CONSTRAINT "1" FOREIGN KEY ("student_id") REFERENCES "students" ("student_id") ON UPDATE CASCADE ON DELETE NO ACTION);''')
         db.import_m(self.csv_m)
         db.submits_status(("DB20240103",))
-    def test_submits_status(self):
+
+class Test_Work(unittest.TestCase):
+    def setUp(self) -> None:
+        self.db = Database()
+        # bak = os.path.join(self.db.sql_path,"bak.sql")
+        # with open(bak, 'r', encoding='utf-8') as f:
+        #     sql_script = f.read()
+        #     self.db.cur.executescript(sql_script)
+        #     self.db.con.commit()
+    
+    def tearDown(self) -> None:
         pass
+    
+    def test_load_s(self):
+        foo = self.db.load_s_data()
+        print(foo)
+    def test_get_a_id(self):
+        aid = self.db.get_a_id("t2024003", "抽卡时的心态管理")
+        print(aid)
+        pass
+    # 测试获取学生名字
+    def test_get_s_name(self):
+        ans = [{'sid': '202412340103', 'sname': '张三'}, {'sid': '202412340104', 'sname': '李四'}, {'sid': '202412340105', 'sname': '王五'}]
+        sid_list = ["202412340103","202412340104","202412340105"]
+        out = self.db.get_s_name(sid_list)
+        self.assertEqual(out, ans)

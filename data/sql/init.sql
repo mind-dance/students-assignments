@@ -1,7 +1,7 @@
 -- 删除已经存在的表
 DROP TABLE IF EXISTS students;
 DROP TABLE IF EXISTS teachers;
-DROP TABLE IF EXISTS assignment;
+DROP TABLE IF EXISTS assignments;
 DROP TABLE IF EXISTS submits;
 
 -- 创建学生表
@@ -17,7 +17,7 @@ CREATE TABLE teachers (
 );
 
 -- 创建作业布置表
-CREATE TABLE assignment (
+CREATE TABLE assignments (
     assignment_id VARCHAR(50) PRIMARY KEY,
     teacher_id VARCHAR(50) NOT NULL,
     assignment_name VARCHAR(50) NOT NULL,

@@ -66,19 +66,28 @@ class Database():
             self.cur.execute("INSERT INTO submits (student_id, assignment_id) VALUES (?, ?)", \
                                     (i, aid))
         
-    # 查，所有学生
-    def load_students_data(self, table = "students"):
-        s_set = set()
-        result = self.cur.execute("SELECT student_id FROM " + table)
+    # 查看所有学生
+    def load_s_data(self):
+        s_dict = []
+        result = self.cur.execute("SELECT student_id, student_name FROM students").fetchall()
         for row in result:
-            s_set.add(row)
-        return s_set
+            s_dict.append({"sid":row[0],"sname":row[1]})
+        return s_dict
     
+    def get_s_name(self, sid_list):
+        '''根据学号查名字'''
+        s_dict = []
+        for i in sid_list:
+            sname = self.cur.execute("SELECT student_name FROM students WHERE student_id = ?",(i,)).fetchone()
+            # 从元组中取出sname
+            s_dict.append({"sid":i,"sname":sname[0]})
+        return s_dict
     
-    # 读取数据
-    def load_a_data(self, aid):
-        '''导入sid,sname,aname。供文件检测使用。'''
-        pass
+    # 查看作业布置
+    def get_a_id(self, tid, aname):
+        '''获取作业id'''
+        aid = self.cur.execute("SELECT assignment_id FROM assignments WHERE teacher_id = ? AND assignment_name = ?",(tid,aname)).fetchone()
+        return aid[0]
     # 提交数据
     def save_data(self):
         '''保存作业提交记录'''
