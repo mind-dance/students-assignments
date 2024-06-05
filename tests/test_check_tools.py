@@ -2,7 +2,7 @@ import os
 import unittest
 import shutil
 
-from client.check_tools import *
+from ctrl.check_tools import *
 
 
 class Test_check_tools(unittest.TestCase):

@@ -56,10 +56,25 @@ class Database():
     
 
 
-    # 增，学生作业提交情况，已交、缺交
-    def student_status(self):
-        pass
+    # 更新学生作业提交情况，已交
+    def add_submits(self, sid_set, aid):
+        '''sid is list for student_id'''
+        for i in sid_set:
+            self.cur.execute("INSERT INTO submits (student_id, assignment_id) VALUES (?, ?)", \
+                                    (i, aid))
         
+# -- 假设表名为 your_table，包含列 name
+# -- 要判断的条目 B 的值为 some_value
+
+# BEGIN TRANSACTION;
+
+# IF NOT EXISTS (SELECT 1 FROM submits WHERE student_id = ? AND assignment_id = ?) THEN
+#     INSERT INTO submits (name) VALUES ('some_value');
+# END IF;
+
+# COMMIT TRANSACTION;
+
+
     # 删，删除某个学生
     
     # 修改学生信息
@@ -85,6 +100,6 @@ class Database():
         miss = src.difference(smt)
         return miss
 
-        
+
 
     # 查，学生个人作业提交率

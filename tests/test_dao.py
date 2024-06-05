@@ -1,4 +1,4 @@
-from client.dao import *
+from ctrl.dao import *
 import unittest
 
 class Test_import(unittest.TestCase):

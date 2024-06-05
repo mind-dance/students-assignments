@@ -22,10 +22,44 @@ Python, Flask, SQLite。
 
 ## E-R图
 
-![E-R.drawio](README.assets/E-R.drawio.png)  
-注意：该图片包含了源数据，可以直接使用draw.io打开`README.assets/E-R.drawio.png`即可编辑。
+![E-R](README.assets/er.png)  
+注意：该图片包含了源数据，使用draw.io打开`README.assets/er.png`即可编辑。
 
 ## 数据表类图
+
+![class](README.assets/class.png)  
+注意：该图片包含了源数据，使用draw.io打开`README.assets/class.png`即可编辑。
+
+```sql
+-- 学生表
+CREATE TABLE "students" (
+	"student_id" VARCHAR(50) NOT NULL,
+	"student_name" VARCHAR(50) NOT NULL,
+	PRIMARY KEY ("student_id")
+)
+;
+```
+
+```sql
+-- 作业统计表
+CREATE TABLE "submits" (
+	"student_id" VARCHAR(50) NOT NULL,
+	"assignment_title" VARCHAR(50) NOT NULL,
+	-- CONSTRAINT "0" FOREIGN KEY ("assignment_id") REFERENCES "assignment" ("assignment_id") ON UPDATE CASCADE ON DELETE NO ACTION,
+	CONSTRAINT "1" FOREIGN KEY ("student_id") REFERENCES "students" ("student_id") ON UPDATE CASCADE ON DELETE NO ACTION
+)
+;
+```
+```sql
+-- 教师表
+CREATE TABLE "teachers" (
+	"teacher_id" VARCHAR(50) NOT NULL,
+	"teacher_name" VARCHAR(50) NOT NULL,
+	PRIMARY KEY ("teacher_id")
+)
+;
+```
+
 
 ## 使用说明
 
@@ -39,7 +73,29 @@ pip install -r requirements.txt
 
 ## 开发说明
 
+### 流程
+
+向程序提供已提交作业所在的位置，程序会历遍文件夹，读取所有文件名。
+
+程序会从数据库中查询学号和本次实验标题，生成一份标准名单。  
+比较读取的文件名在不在标准名单中，若在则视为已提交`done`，不在提交名单中的视为缺交`miss`，不在标准名单中的视为错误文件名`error`。  
+尝试从错误的文件名中读取学号，如果成功，记为提交并重命名，不成功则记入其他列表`etc`。最后不应该存在error。
+
+将已提交作业的名单写入数据库。如果存在则忽略。
+
+与数据库中全体学生相比较，顺便修正文件名错误的文件，并写入数据库。
+
+#### 获取文件名
+
+切换到作业所在位置。`check_tools.py`提供函数支持。`def get_all_file(abs_path)->list`接受一个绝对路径并查找路径中所有的文件名，返回一个列表。
+
+#### 查找已提交作业
+
+数据库联查
+
 作业提交状态：0（done），1（miss）
+
+
 
 ## 参考文献
 

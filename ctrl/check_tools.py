@@ -4,7 +4,7 @@ import json
 
 
 # 获取当前目录下的所有文件名
-def get_all_file(abs_path):
+def get_all_file(abs_path)->list:
     files = []
     # 列出所有文件与子文件夹
     dirs = os.listdir(abs_path)
