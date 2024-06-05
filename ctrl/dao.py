@@ -93,7 +93,7 @@ class Database():
     def set_submits(self, m_tuple):
         '''保存作业提交记录'''
         for row in m_tuple:
-            self.cur.execute("INSERT INTO submits (student_id, assignment_id) VALUES (?, ?)", row)
+            self.cur.execute("INSERT OR IGNORE INTO submits (student_id, assignment_id) VALUES (?, ?)", row)
         self.con.commit()
 
         

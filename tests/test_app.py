@@ -31,6 +31,8 @@ class Test_app(unittest.TestCase):
         return back
 
     def test_main(self):
+        self.db.cur.execute("DELETE FROM submits")
+        self.db.con.commit()
         self.t.aname = "抽卡时的心态管理"
         # 教师：派蒙
         self.t.tid = "t2024003"
