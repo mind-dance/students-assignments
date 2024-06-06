@@ -13,7 +13,9 @@ class Database():
         # 连接数据库
         self.con = sqlite3.connect(self.db_path)
         self.cur = self.con.cursor()
-
+        # 合法sql表与字段
+        self.valid_table = {"students", "teachers", "assignments", "submits"}
+        self.valid_field = {"student_id","student_name", "teacher_id", "teacher_name", "assignment_id", "assignment_name"}
     # 导入学生名单
     def import_s(self, csvfile):
         self.cur.execute("DELETE FROM students")
@@ -56,8 +58,49 @@ class Database():
                 self.cur.execute("INSERT INTO submits (student_id, assignment_id) VALUES (?, ?)", \
                                     (row["student_id"], row["assignment_id"]))
             self.con.commit()
-    
-
+    # 有sql注入风险。
+    # 下一步完善计划，用if语句验证用户输入，用开发者添加从句，用户输入用？传参。
+    # https://cs50.readthedocs.io/libraries/cs50/python/#how-can-i-add-optional-clauses-to-a-query
+    def import_csv(self, csvfile, table):
+        # 清空表格
+        self.cur.execute("DELETE FROM " + table)
+        # 打开csv文件
+        with open(csvfile, 'r', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            field = next(reader)
+            for row in reader:
+                query = self.make_insert(table, field, row)
+    # 构建查询语句
+    def make_insert(self, table, field, row):
+        '''输入目标表，字段名，数值，会检验字段名、表名是否合法，但是不会检测字段名是否应该出现在表中,有执行函数捕捉错误进行异常处理'''
+        query = "INSERT INTO " + table
+        clauses = []
+        values = []
+        for i in field:
+            match i:
+                case "student_id":
+                    clauses.append("?")
+                    values.append(i)
+                case "student_name":
+                    clauses.append("?")
+                    values.append(i)
+                case "teacher_id":
+                    clauses.append("?")
+                    values.append(i)
+                case "teacher_name":
+                    clauses.append("?")
+                    values.append(i)
+                case "assignment_id":
+                    clauses.append("?")
+                    values.append(i)
+                case "assignment_name":
+                    clauses.append("?")
+                    values.append(i)
+                case _:
+                    raise ValueError("字段名有误")
+        if clauses:
+            query = query + " (" + ", ".join(field) + ") VALUES (" + ", ".join(clauses) + ")"
+        return query
 
     # 更新学生作业提交情况，已交
     def add_submits(self, sid_set, aid):
