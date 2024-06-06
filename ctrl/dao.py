@@ -15,7 +15,7 @@ class Database():
         self.cur = self.con.cursor()
         # 合法sql表与字段
         self.valid_table = {"students", "teachers", "assignments", "submits"}
-        self.valid_field = {"student_id","student_name", "teacher_id", "teacher_name", "assignment_id", "assignment_name"}
+        self.valid_field = {"student_id", "student_name", "teacher_id", "teacher_name", "assignment_id", "assignment_name"}
 
     # 构建查询语句
     def make_insert(self, table, field):
@@ -37,8 +37,7 @@ class Database():
             query = query + " (" + ", ".join(field) + ") VALUES (" + ", ".join(clauses) + ")"
         return query
 
-    # 有sql注入风险。
-    # 下一步完善计划，用if语句验证用户输入，用开发者添加从句，用户输入用？传参。
+    # 参考了cs50包含从句的query语句构建教程
     # https://cs50.readthedocs.io/libraries/cs50/python/#how-can-i-add-optional-clauses-to-a-query
     def import_csv(self, csvfile, table):
         '''导入表格，需要负责异常捕捉'''

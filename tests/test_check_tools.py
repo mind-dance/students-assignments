@@ -114,5 +114,4 @@ class Test_Tools_normal(unittest.TestCase):
         self.create_files(abs_path, bug_list)
         self.t.rename_files(abs_path, bug_tuple, s_dict, config)
         out = set(self.t.get_all_files(abs_path))
-        print(out)
         self.assertEqual(out,ans)
