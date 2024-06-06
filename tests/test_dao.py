@@ -28,8 +28,8 @@ class Test_Work(unittest.TestCase):
     def tearDown(self) -> None:
         pass
     @unittest.skip("还没写好测试")
-    def test_get_s_data(self):
-        out = self.db.get_s_data()
+    def test_get_all_s(self):
+        out = self.db.get_all_s()
         print(out)
     def test_get_a_id(self):
         aid = self.db.get_a_id("t2024003", "抽卡时的心态管理")

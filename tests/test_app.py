@@ -45,7 +45,7 @@ class Test_app(unittest.TestCase):
         # 断言作业id
         self.assertEqual(self.t.aid,"YS20240106")
         # 数据库查询学生表（字典）
-        s_dict = self.db.get_s_data()
+        s_dict = self.db.get_all_s()
         # 文件名设置：学号-姓名-作业标题.docx，后期可以优化数据库，让教师关联设置。
         config = ["sid", "sname", "aname"]
         # 准备收作业的文件夹
