@@ -2,6 +2,9 @@
 
 learn_*
 
+# demo
+抽卡时的心态管理/
+temp/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

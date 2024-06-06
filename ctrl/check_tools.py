@@ -4,7 +4,6 @@ import re
 class Tools():
     def __init__(self):
         self.root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        
         self.aid = ""
         self.aname = ""
         self.tid = ""
