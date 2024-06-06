@@ -16,60 +16,7 @@ class Database():
         # 合法sql表与字段
         self.valid_table = {"students", "teachers", "assignments", "submits"}
         self.valid_field = {"student_id","student_name", "teacher_id", "teacher_name", "assignment_id", "assignment_name"}
-    # 导入学生名单
-    def import_s(self, csvfile):
-        self.cur.execute("DELETE FROM students")
-        # 打开文件
-        with open(csvfile, 'r', encoding='utf-8') as file:
-            reader = csv.DictReader(file)
-            # 读取学生信息
-            for row in reader:
-                # 插入数据库
-                self.cur.execute("INSERT INTO students (student_id, student_name) VALUES (?, ?)", \
-                                 (row["student_id"], row["student_name"]))
-            self.con.commit()
 
-    # 导入教师名单
-    def import_t(self, csvfile):
-        self.cur.execute("DELETE FROM teachers")
-        with open(csvfile, 'r', encoding='utf-8') as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                self.cur.execute("INSERT INTO teachers (teacher_id, teacher_name) VALUES (?, ?)", \
-                                    (row["teacher_id"], row["teacher_name"]))
-            self.con.commit()
-  
-    # 导入作业布置情况
-    def import_a(self, csvfile):
-        self.cur.execute("DELETE FROM assignments")
-        with open(csvfile, 'r', encoding='utf-8') as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                self.cur.execute("INSERT INTO assignments (assignment_id, teacher_id, assignment_name) VALUES (?, ?, ?)", \
-                                    (row["assignment_id"], row["teacher_id"], row["assignment_name"]))
-            self.con.commit()
-    
-    # 导入作业提交情况
-    def import_m(self, csvfile):
-        self.cur.execute("DELETE FROM submits")
-        with open(csvfile, 'r', encoding='utf-8') as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                self.cur.execute("INSERT INTO submits (student_id, assignment_id) VALUES (?, ?)", \
-                                    (row["student_id"], row["assignment_id"]))
-            self.con.commit()
-    # 有sql注入风险。
-    # 下一步完善计划，用if语句验证用户输入，用开发者添加从句，用户输入用？传参。
-    # https://cs50.readthedocs.io/libraries/cs50/python/#how-can-i-add-optional-clauses-to-a-query
-    def import_csv(self, csvfile, table):
-        # 清空表格
-        self.cur.execute("DELETE FROM " + table)
-        # 打开csv文件
-        with open(csvfile, 'r', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            field = next(reader)
-            for row in reader:
-                query = self.make_insert(table, field, row)
     # 构建查询语句
     def make_insert(self, table, field, row):
         '''输入目标表，字段名，数值，会检验字段名、表名是否合法，但是不会检测字段名是否应该出现在表中,有执行函数捕捉错误进行异常处理'''
@@ -102,23 +49,40 @@ class Database():
             query = query + " (" + ", ".join(field) + ") VALUES (" + ", ".join(clauses) + ")"
         return query
 
+    # 有sql注入风险。
+    # 下一步完善计划，用if语句验证用户输入，用开发者添加从句，用户输入用？传参。
+    # https://cs50.readthedocs.io/libraries/cs50/python/#how-can-i-add-optional-clauses-to-a-query
+    def import_csv(self, csvfile, table):
+        '''导入表格，需要负责异常捕捉'''
+        # 清空表格
+        self.cur.execute("DELETE FROM " + table)
+        # 打开csv文件
+        with open(csvfile, 'r', encoding='utf-8') as f:
+            reader = csv.reader(f)
+            field = next(reader)
+            for row in reader:
+                query = self.make_insert(table, field, row)
+    
+
     # 更新学生作业提交情况，已交
     def add_submits(self, sid_set, aid):
         '''sid is list for student_id'''
         for i in sid_set:
             self.cur.execute("INSERT INTO submits (student_id, assignment_id) VALUES (?, ?)", \
                                     (i, aid))
-        
-    # 查看所有学生
+
+    # 查看所有学生，
     def get_s_data(self):
+        '''获取学生表，返回s_dict，list[dict{key,key}]'''
         s_dict = []
         result = self.cur.execute("SELECT student_id, student_name FROM students").fetchall()
         for row in result:
             s_dict.append({"sid":row[0],"sname":row[1]})
         return s_dict
     
+    # 获取学号
     def get_s_dict(self, sid_list):
-        '''根据学号查名字'''
+        '''根据学号查名字，回s_dict，list[dict{key,key}]'''
         s_dict = []
         for i in sid_list:
             sname = self.cur.execute("SELECT student_name FROM students WHERE student_id = ?",(i,)).fetchone()
