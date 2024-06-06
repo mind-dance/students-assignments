@@ -18,7 +18,7 @@ class Database():
         self.valid_field = {"student_id","student_name", "teacher_id", "teacher_name", "assignment_id", "assignment_name"}
 
     # 构建查询语句
-    def make_insert(self, table, field, row):
+    def make_insert(self, table, field):
         '''输入目标表，字段名，数值，会检验字段名、表名是否合法，但是不会检测字段名是否应该出现在表中,有执行函数捕捉错误进行异常处理'''
         # 检查表是否合法
         if table not in self.valid_table:
@@ -44,12 +44,21 @@ class Database():
         '''导入表格，需要负责异常捕捉'''
         # 清空表格
         self.cur.execute("DELETE FROM " + table)
-        # 打开csv文件
-        with open(csvfile, 'r', encoding='utf-8') as f:
-            reader = csv.reader(f)
-            field = next(reader)
-            for row in reader:
-                query = self.make_insert(table, field, row)
+        try:
+            # 打开csv文件
+            with open(csvfile, 'r', encoding='utf-8') as f:
+                reader = csv.reader(f)
+                # 读取字段
+                field = next(reader)
+                for row in reader:
+                    # 构建查询语句并执行
+                    query = self.make_insert(table, field)
+                    self.cur.execute(query,row)
+                # 提交事务
+                self.con.commit()
+        # 捕捉异常，例如找不到字段无法插入等。
+        except:
+            print("出错了")
     
 
     # 更新学生作业提交情况，已交
