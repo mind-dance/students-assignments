@@ -20,31 +20,19 @@ class Database():
     # 构建查询语句
     def make_insert(self, table, field, row):
         '''输入目标表，字段名，数值，会检验字段名、表名是否合法，但是不会检测字段名是否应该出现在表中,有执行函数捕捉错误进行异常处理'''
+        # 检查表是否合法
+        if table not in self.valid_table:
+            raise ValueError("表名有误")
+        
         query = "INSERT INTO " + table
         clauses = []
         values = []
         for i in field:
-            match i:
-                case "student_id":
-                    clauses.append("?")
-                    values.append(i)
-                case "student_name":
-                    clauses.append("?")
-                    values.append(i)
-                case "teacher_id":
-                    clauses.append("?")
-                    values.append(i)
-                case "teacher_name":
-                    clauses.append("?")
-                    values.append(i)
-                case "assignment_id":
-                    clauses.append("?")
-                    values.append(i)
-                case "assignment_name":
-                    clauses.append("?")
-                    values.append(i)
-                case _:
-                    raise ValueError("字段名有误")
+            if i in self.valid_field:
+                clauses.append("?")
+                values.append(i)
+            else:
+                raise ValueError("字段名有误")
         if clauses:
             query = query + " (" + ", ".join(field) + ") VALUES (" + ", ".join(clauses) + ")"
         return query
