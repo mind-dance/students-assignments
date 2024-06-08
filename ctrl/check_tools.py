@@ -25,8 +25,9 @@ class Tools():
         # 返回所有文件名
         return files
     
-    # 提供文件名，获取完成作业的元组对
-    def get_m_tuple(self,done_set):
+
+    def make_m_tuple(self,done_set):
+        '''根据完成sid，制作完成作业的元组(sid,aid)'''
         m_tuple = []
         out, null = self.read_files_sid(done_set)
         for row in out:

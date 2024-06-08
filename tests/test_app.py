@@ -89,5 +89,5 @@ class Test_app(unittest.TestCase):
             for row in miss_dict:
                 writer.writerow(row)
         # 写入已交作业的名单
-        m_tuple = self.t.get_m_tuple(done)
+        m_tuple = self.t.make_m_tuple(done)
         self.db.set_submits(m_tuple)
