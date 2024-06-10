@@ -22,12 +22,12 @@ Python, Flask, SQLite。
 
 ## E-R图
 
-![E-R](README.assets/er.png)  
+![E-R](assets/er.png)  
 注意：该图片包含了源数据，使用draw.io打开`README.assets/er.png`即可编辑。
 
 ## 数据表类图
 
-![class](README.assets/class.png)  
+![class](assets/class.png)  
 注意：该图片包含了源数据，使用draw.io打开`README.assets/class.png`即可编辑。
 
 ```sql
