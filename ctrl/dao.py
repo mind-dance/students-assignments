@@ -23,17 +23,15 @@ class Database():
     # 参考了cs50包含从句的query语句构建教程
     # https://cs50.readthedocs.io/libraries/cs50/python/#how-can-i-add-optional-clauses-to-a-query
     def make_insert(self, table, field):
-        '''输入目标表，字段名，数值，会检验字段名、表名是否合法，但是不会检测字段名是否应该出现在表中,有执行函数捕捉错误进行异常处理'''
+        '''构建插入语句，需要输入目标表，字段名，会检验字段名、表名是否合法，但是不会检测字段名是否应该出现在表中,由执行函数捕捉错误进行异常处理'''
         # 检查表是否合法
         if table not in self.valid_table:
             raise ValueError("表名有误")
         query = "INSERT INTO " + table
         clauses = []
-        values = []
         for i in field:
             if i in self.valid_field:
                 clauses.append("?")
-                values.append(i)
             else:
                 raise ValueError("字段名有误")
         if clauses:
