@@ -2,7 +2,7 @@ import os
 import unittest
 import shutil
 
-from ctrl.check_tools import *
+from backend.tools import *
 
 # 正常工作单元测试，工作于临时文件夹
 class Test_Tools_normal(unittest.TestCase):
@@ -57,7 +57,7 @@ class Test_Tools_normal(unittest.TestCase):
                {"sid":"202412340103","sname":"张三","aname":"实验1-日常生活中如何进攻一个村庄"},\
                 ]
         config = ["sid","sname","aname"]
-        out = self.t.generate_files_list(src,config)
+        out = self.t.make_std_list(src,config)
         self.assertEqual(out,ans)
 
     # 检查文件提交情况，可能有正常提交，缺交，未知的文件名

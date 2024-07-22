@@ -38,6 +38,9 @@ class Database():
             query = query + " (" + ", ".join(field) + ") VALUES (" + ", ".join(clauses) + ")"
         return query
 
+    def make_select(self, table, field):
+        pass
+
     # 构建查询语句
     def import_csv(self, csvfile, table):
         '''导入表格，需要负责异常捕捉'''

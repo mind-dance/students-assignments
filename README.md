@@ -75,15 +75,28 @@ pip install -r requirements.txt
 
 ### 流程
 
-向程序提供已提交作业所在的位置，程序会历遍文件夹，读取所有文件名。
+向程序提供已提交作业所在的位置，程序会历遍文件夹，读取所有文件名。load_filenames
 
-程序会从数据库中查询学号和本次实验标题，生成一份标准名单。  
-比较读取的文件名在不在标准名单中，若在则视为已提交`done`，不在提交名单中的视为缺交`miss`，不在标准名单中的视为错误文件名`error`。  
-尝试从错误的文件名中读取学号，如果成功，记为提交并重命名，不成功则记入其他列表`etc`。最后不应该存在error。
+程序会从数据库中查询学号read_sid和本次实验标题，生成一份标准名单。  make_std_list
+比较读取的文件名在不在标准名单中check_filenames，若在则视为已提交`done`，不在提交名单中的视为缺交`miss`，不在标准名单中的视为错误文件名`error`。  
+尝试从错误的文件名中读取学号，如果成功，记为提交并重命名，rename_filenames不成功则记入其他列表`etc`。最后不应该存在error。
 
 将已提交作业的名单写入数据库。如果存在则忽略。
 
 与数据库中全体学生相比较，顺便修正文件名错误的文件，并写入数据库。
+
+```json-with-comment
+{
+	sid: 202415210201,
+	sname: "张三",
+	aid: "FA20240601",
+	aindex: 1,
+	aname: "危险的想法与刑法"
+	hw: "202415210201-张三-实验报告"
+	status: "miss",
+	path: null
+}
+```
 
 #### 获取文件名
 
@@ -124,3 +137,5 @@ pip install -r requirements.txt
 [正则表达式测试网站：regex101](https://regex101.com/) 
 
 [绘图工具：draw.io](https://app.diagrams.net/)
+
+[ant design vue组件总览](https://antdv.com/components/overview-cn)

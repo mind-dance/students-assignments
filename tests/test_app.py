@@ -2,8 +2,8 @@ import os
 import csv
 import unittest
 import shutil
-from ctrl.check_tools import *
-from ctrl.dao import *
+from backend.tools import *
+from backend.database import *
 
 class Test_app(unittest.TestCase):
     # 初始化
@@ -59,7 +59,7 @@ class Test_app(unittest.TestCase):
         # 断言文件读取函数
         self.assertEqual(set(files_list),set(demo_files))
         # 生成标准文件清单
-        std_list = self.t.generate_files_list(s_dict, config)
+        std_list = self.t.make_std_list(s_dict, config)
         ans_std_list = ['202412340101-坤一-抽卡时的心态管理.docx', '202412340102-熊二-抽卡时的心态管理.docx', '202412340103-张三-抽卡时的心态管理.docx', '202412340104-李四-抽卡时的心态管理.docx', '202412340105-王五-抽卡时的心态管理.docx', '202412340106-赵六-抽卡时的心态管理.docx', '202412340107-孙七-抽卡时的心态管理.docx', '202412340108-周八-抽卡时的心态管理.docx', '202412340109-吴九-抽卡时的心态管理.docx', '202412340110-郑十-抽卡时的心态管理.docx']
         self.assertEqual(std_list, ans_std_list)
         # 检查提交信息

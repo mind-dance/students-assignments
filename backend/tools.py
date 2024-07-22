@@ -8,24 +8,44 @@ class Tools():
         self.aname = ""
         self.tid = ""
         self.tname = ""
-
+        self.template = ""
 
     def get_root(self):
         return self.root_path
     
-    def get_all_files(self,abs_path):
+    def make_filename(self, s_object):
+        '''生成一个文件名'''
+        # 替换模板中的占位符
+        filename = self.template
+        for ph, val in s_object.items():
+            filename = filename.replace("${" + ph + "}", val)
+        return filename
+
+    def save_filename(self, s_object, filename):
+        '''将文件名记入字典中'''
+        s_object["hw"] = filename
+
+    def load_filenames(self,abs_path):
         '''获取目标目录的所有文件名'''
-        files = []
+        filenames = []
         # 列出所有文件与子文件夹
         dirs = os.listdir(abs_path)
         # 过滤出文件
         for item in dirs:
             if os.path.isfile(os.path.join(abs_path, item)):
-                files.append(item)
+                filenames.append(item)
         # 返回所有文件名
-        return files
+        return filenames    
+
+    def make_std_list(self):
+        '''生成应交作业名单，输入学生的json对象，每个元素为字典。返回一个列表，用于判断正确提价的文件名'''
+        std_list = []
+
+        
+        return std_list
     
 
+    
     def make_m_tuple(self,done_set):
         '''根据完成sid，制作完成作业的元组(sid,aid)'''
         m_tuple = []
@@ -34,19 +54,6 @@ class Tools():
             sid = row[0]
             m_tuple.append((sid, self.aid))
         return m_tuple
-
-    def generate_files_list(self, s_dict, config):
-        '''生成应交作业名单，输入s_dict列表，每个元素为字典。返回一个列表，用于判断正确提价的文件名'''
-        std_list = []
-        # 用于获取设置中的值
-        for row in s_dict:
-            parts = []
-            row["aname"] = self.aname
-            for col in config:
-                parts.append(row.get(col))
-            new_name = '-'.join(parts) + '.docx'
-            std_list.append(new_name)
-        return std_list
 
     def check_files(self, files, std):
         '''比较已交文件夹中的文件与应交作业的名单，返回三个集合'''
@@ -77,7 +84,7 @@ class Tools():
     def rename_files(self, abs_path, bug_tuple, s_dict, config):
         '''重命名已识别但不正确的文件名,s_dict为识别成功准备重命名的列表'''
         os.chdir(abs_path)
-        cort_list = self.generate_files_list(s_dict, config)
+        cort_list = self.make_std_list()
         for i in range(len(s_dict)):
             os.rename(bug_tuple[i][1], cort_list[i])
         return 0
