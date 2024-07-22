@@ -4,7 +4,7 @@
 
 本项目是数据库大作业（数据库课程设计）。本项目较为综合，包含了数据导入导出（csv和json）、数据库的连接、编写测试所需的测试用例，是本人目前（截止至2024年六一儿童节）最为复杂的项目之一（另一个是CS50x的tideman）。
 
-程序主入口为ctrl目录下的`app.py`。文件夹`ctrl`为控制层，`view`为前端，`data`为存储数据的模型层，`tests`目录下包含了一些自动化测试，包含一些简单的测试用例。可以在改错代码的时候适当提醒。测试可以确保你的代码按照你的想法运作，我建议各位一遍写代码一遍写测试，不然后期会很痛苦。不会写测试的可以查看下面的参考文献。
+程序主入口为分为两部分，backend目录下的`app.py`和frontend目录下运行`npm run dev`。`tests`目录下包含了一些自动化测试，包含一些简单的测试用例。可以在改错代码的时候适当提醒。测试可以确保你的代码按照你的想法运作，我建议各位一遍写代码一遍写测试，不然后期会很痛苦。不会写测试的可以查看下面的参考文献。
 
 有问题可以提issue，有优化可以提PR。
 
@@ -30,6 +30,7 @@ Python, Flask, SQLite。
 ![class](assets/class.png)  
 注意：该图片包含了源数据，使用draw.io打开`README.assets/class.png`即可编辑。
 
+学生表记录学生的姓名和学号
 ```sql
 -- 学生表
 CREATE TABLE "students" (
@@ -39,25 +40,15 @@ CREATE TABLE "students" (
 )
 ;
 ```
-
+登记表记录学生作业提交状态
 ```sql
 -- 作业统计表
 CREATE TABLE "submits" (
-	"student_id" VARCHAR(50) NOT NULL,
-	"assignment_title" VARCHAR(50) NOT NULL,
-	-- CONSTRAINT "0" FOREIGN KEY ("assignment_id") REFERENCES "assignment" ("assignment_id") ON UPDATE CASCADE ON DELETE NO ACTION,
-	CONSTRAINT "1" FOREIGN KEY ("student_id") REFERENCES "students" ("student_id") ON UPDATE CASCADE ON DELETE NO ACTION
-)
-;
-```
-```sql
--- 教师表
-CREATE TABLE "teachers" (
-	"teacher_id" VARCHAR(50) NOT NULL,
-	"teacher_name" VARCHAR(50) NOT NULL,
-	PRIMARY KEY ("teacher_id")
-)
-;
+    "student_id" VARCHAR(50) NOT NULL,
+    "status" INTEGER NOT NULL DEFAULT 0,
+    CONSTRAINT "fk_student_id" FOREIGN KEY ("student_id") REFERENCES "students" ("student_id") ON UPDATE CASCADE ON DELETE NO ACTION
+);
+
 ```
 
 
@@ -77,8 +68,8 @@ pip install -r requirements.txt
 
 向程序提供已提交作业所在的位置，程序会历遍文件夹，读取所有文件名。load_filenames
 
-程序会从数据库中查询学号read_sid和本次实验标题，生成一份标准名单。  make_std_list
-比较读取的文件名在不在标准名单中check_filenames，若在则视为已提交`done`，不在提交名单中的视为缺交`miss`，不在标准名单中的视为错误文件名`error`。  
+程序会从数据库中查询学号read_sid和本次实验标题，生成一份标准名单。  create_std_list
+比较读取的文件名在不在标准名单中check_filenames，若在则视为已提交`1`，不在提交名单中的视为缺交`0`，不在标准名单中的视为错误文件名`error`。  
 尝试从错误的文件名中读取学号，如果成功，记为提交并重命名，rename_filenames不成功则记入其他列表`etc`。最后不应该存在error。
 
 将已提交作业的名单写入数据库。如果存在则忽略。
@@ -93,7 +84,7 @@ pip install -r requirements.txt
 	aindex: 1,
 	aname: "危险的想法与刑法"
 	hw: "202415210201-张三-实验报告"
-	status: "miss",
+	status: 0,
 	path: null
 }
 ```

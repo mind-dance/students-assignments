@@ -45,7 +45,7 @@ class Test_app(unittest.TestCase):
         # 断言作业id
         self.assertEqual(self.t.aid,"YS20240106")
         # 数据库查询学生表（字典）
-        s_dict = self.db.get_all_s()
+        s_dict = self.db.read_s_table()
         # 文件名设置：学号-姓名-作业标题.docx，后期可以优化数据库，让教师关联设置。
         config = ["sid", "sname", "aname"]
         # 准备收作业的文件夹
@@ -65,19 +65,19 @@ class Test_app(unittest.TestCase):
         # 检查提交信息
         done, miss, error = self.t.check_files(files_list, std_list)
         # 找出可以识别但文件名不正确的文件
-        bug_tuple, etc = self.t.read_files_sid(error)
+        bug_tuple, etc = self.t.read_error_list(error)
         # 生成bug的学号列表
         bug_sid_list = self.get_sub(bug_tuple,0)
         # 制作bug的学号字典
         bug_s_dict = self.db.get_s_dict(bug_sid_list)
         # 重命名
-        self.t.rename_files(abs_path, bug_tuple, bug_s_dict, config)
+        self.t.rename_file(abs_path, bug_tuple, bug_s_dict, config)
         ans_bug_fix_files = []
         # 再次检查文件
         files_list = self.t.get_all_files(abs_path)
         done, miss, error = self.t.check_files(files_list, std_list)
         # 打印缺交列表
-        miss, null = self.t.read_files_sid(miss)
+        miss, null = self.t.read_error_list(miss)
         miss_id = self.get_sub(miss, 0)
         miss_dict = self.db.get_s_dict(miss_id)
         ans_miss_dict = [{"sid":"202412340102","sname":"熊二"}]

@@ -29,7 +29,7 @@ class Test_Work(unittest.TestCase):
         pass
     @unittest.skip("还没写好测试")
     def test_get_all_s(self):
-        out = self.db.get_all_s()
+        out = self.db.read_s_table()
         print(out)
     def test_get_a_id(self):
         aid = self.db.get_a_id("t2024003", "抽卡时的心态管理")

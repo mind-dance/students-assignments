@@ -89,7 +89,7 @@ class Test_Tools_normal(unittest.TestCase):
                ("202412340605", "202412340605-王五-kfc"), ("202412340606", "202412340606-赵六-实验666.ppt")]
         ans_etc = ["吴九-实验1.docx"]
         # 测试函数
-        result, etc = self.t.read_files_sid(test_error_list)
+        result, etc = self.t.read_error_list(test_error_list)
         # 断言
         self.assertEqual(set(result),set(ans))
         self.assertEqual(set(etc),set(ans_etc))
@@ -112,6 +112,6 @@ class Test_Tools_normal(unittest.TestCase):
         abs_path = self.demo_path
         # 批量创建文件
         self.create_files(abs_path, bug_list)
-        self.t.rename_files(abs_path, bug_tuple, s_dict, config)
+        self.t.rename_file(abs_path, bug_tuple, s_dict, config)
         out = set(self.t.get_all_files(abs_path))
         self.assertEqual(out,ans)
