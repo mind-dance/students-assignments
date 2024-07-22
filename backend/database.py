@@ -16,31 +16,45 @@ class Database():
         self.con = sqlite3.connect(self.db_path)
         self.cur = self.con.cursor()
         # 合法sql表与字段
-        self.valid_table = {"students", "teachers", "assignments", "submits"}
-        self.valid_field = {"student_id", "student_name", "teacher_id", "teacher_name", "assignment_id", "assignment_name"}
+        self.valid_table = {"students", "submits"}
+        self.valid_field = {"sid", "sname", "hw", "status", "path"}
 
 
     # 参考了cs50包含从句的query语句构建教程
     # https://cs50.readthedocs.io/libraries/cs50/python/#how-can-i-add-optional-clauses-to-a-query
-    def make_insert(self, table, field):
+    def make_insert(self, table: str, fields: list):
         '''构建插入语句，需要输入目标表，字段名，会检验字段名、表名是否合法，但是不会检测字段名是否应该出现在表中,由执行函数捕捉错误进行异常处理'''
         # 检查表是否合法
         if table not in self.valid_table:
             raise ValueError("表名有误")
         query = "INSERT INTO " + table
         clauses = []
-        for i in field:
+        for i in fields:
             if i in self.valid_field:
                 clauses.append("?")
             else:
                 raise ValueError("字段名有误")
         if clauses:
-            query = query + " (" + ", ".join(field) + ") VALUES (" + ", ".join(clauses) + ")"
+            query = query + " (" + ", ".join(fields) + ") VALUES (" + ", ".join(clauses) + ")"
         return query
 
-    def make_select(self, table, field):
-        pass
-
+    def make_update(self, table: str, fields: list, condition: str):
+        # 检查表是否合法
+        if table not in self.valid_table:
+            raise ValueError("表名有误")
+        query = "UPDATE " + table + " SET "
+        clauses = []
+        for i in fields:
+            if i in self.valid_field:
+                clauses.append("?")
+            else:
+                raise ValueError("字段名有误")
+        if clauses:
+            query = query + ", ".join(f"{field} = ?" for field in fields)
+            query = query + " WHERE " + condition + " = ?"
+        
+        return query
+    
     # 构建查询语句
     def import_csv(self, csvfile, table):
         '''导入表格，需要负责异常捕捉'''
@@ -51,10 +65,10 @@ class Database():
             with open(csvfile, 'r', encoding='utf-8') as f:
                 reader = csv.reader(f)
                 # 读取字段
-                field = next(reader)
+                fields = next(reader)
+                query = self.make_insert(table, fields)
                 for row in reader:
                     # 构建查询语句并执行
-                    query = self.make_insert(table, field)
                     self.cur.execute(query,row)
                 # 提交事务
                 self.con.commit()
@@ -63,17 +77,16 @@ class Database():
             print("出错了")
     
 
-    # 查看所有学生，
-    def read_s_table(self):
-        '''获取学生表，以列表返回'''
-        s_list = []
-        result = self.cur.execute("SELECT student_id, student_name FROM students").fetchall()
+    # 获取所有学号
+    def read_all_s_id(self):
+        s_id = []
+        result = self.cur.execute("SELECT student_id FROM students").fetchall()
         for row in result:
-            s_list.append({"sid":row[0],"sname":row[1]})
-        return s_list
-
+            s_id.append(row[0])
+        return s_id
+    
     # 获取学号
-    def get_s_dict(self, sid_list):
+    def get_s_object(self, sid_list):
         '''根据学号查名字，返回s_dict，list[dict{key,key}]'''
         s_dict = []
         for i in sid_list:
@@ -81,18 +94,3 @@ class Database():
             # 从元组中取出sname
             s_dict.append({"sid":i,"sname":sname[0]})
         return s_dict
-    
-
-    # 获取作业id
-    def get_a_id(self, tid, aname):
-        '''根据教师工号和作业名称，获取作业id'''
-        aid = self.cur.execute("SELECT assignment_id FROM assignments WHERE teacher_id = ? AND assignment_name = ?",(tid,aname)).fetchone()
-        return aid[0]
-    
-
-    # 提交作业记录
-    def set_submits(self, m_tuple):
-        '''保存作业提交记录'''
-        for row in m_tuple:
-            self.cur.execute("INSERT OR IGNORE INTO submits (student_id, assignment_id) VALUES (?, ?)", row)
-        self.con.commit()

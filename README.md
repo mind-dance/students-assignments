@@ -66,9 +66,9 @@ pip install -r requirements.txt
 
 ### 流程
 
-向程序提供已提交作业所在的位置，程序会历遍文件夹，读取所有文件名。load_filenames
+向程序提供已提交作业所在的位置，程序会历遍文件夹，读取所有文件名。`load_filenames`
 
-程序会从数据库中查询学号read_sid和本次实验标题，生成一份标准名单。  create_std_list
+程序会从数据库中查询学号`read_sid`和本次实验标题，生成一份标准名单。  `create_std_list`
 比较读取的文件名在不在标准名单中check_filenames，若在则视为已提交`1`，不在提交名单中的视为缺交`0`，不在标准名单中的视为错误文件名`error`。  
 尝试从错误的文件名中读取学号，如果成功，记为提交并重命名，rename_filenames不成功则记入其他列表`etc`。最后不应该存在error。
 
@@ -79,10 +79,6 @@ pip install -r requirements.txt
 ```json-with-comment
 {
 	sid: 202415210201,
-	sname: "张三",
-	aid: "FA20240601",
-	aindex: 1,
-	aname: "危险的想法与刑法"
 	hw: "202415210201-张三-实验报告"
 	status: 0,
 	path: null

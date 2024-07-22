@@ -112,6 +112,6 @@ class Test_Tools_normal(unittest.TestCase):
         abs_path = self.demo_path
         # 批量创建文件
         self.create_files(abs_path, bug_list)
-        self.t.rename_file(abs_path, bug_tuple, s_dict, config)
+        self.t._rename_file(abs_path, bug_tuple, s_dict, config)
         out = set(self.t.get_all_files(abs_path))
         self.assertEqual(out,ans)

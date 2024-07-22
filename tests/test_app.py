@@ -71,7 +71,7 @@ class Test_app(unittest.TestCase):
         # 制作bug的学号字典
         bug_s_dict = self.db.get_s_dict(bug_sid_list)
         # 重命名
-        self.t.rename_file(abs_path, bug_tuple, bug_s_dict, config)
+        self.t._rename_file(abs_path, bug_tuple, bug_s_dict, config)
         ans_bug_fix_files = []
         # 再次检查文件
         files_list = self.t.get_all_files(abs_path)
