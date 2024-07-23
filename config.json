@@ -1,0 +1,4 @@
+{
+    "target_path": "backend/demo",
+    "template": "\u8ba1\u79d1-${sname}-${sid}-\u5b9e\u9a8c\u62a5\u544a.docx"
+}

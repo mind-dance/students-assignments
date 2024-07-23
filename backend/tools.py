@@ -1,5 +1,6 @@
 import os
 import re
+import json
 from database import Database
 
 class Tools():
@@ -15,7 +16,20 @@ class Tools():
     
     def get_path(self, file):
         return os.path.join(self.target_path, file)
-
+    
+    # 读取json设置
+    def get_config(self):
+        with open("backend/config.json", "r", encoding="utf-8") as f:
+            config = json.load(f)
+        self.template = config["template"]
+        self.target_path = config["target_path"]
+        
+    # 保存json设置
+    def set_config(self):
+        config = {"target_path": self.target_path,"template": self.template}
+        with open("backend/config.json", "w", encoding="utf-8") as f:
+            json.dump(config, f, sort_keys=True, indent=4)
+        
     def _make_filename(self, sid):
         '''生成单个文件名'''
         s_object = self.db.get_s_object(sid)

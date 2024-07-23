@@ -9,26 +9,24 @@ CORS(app)  # 这行代码启用了CORS，允许来自任何源的请求
 # 初始化
 t = Tools()
 os.chdir(t.same_path)
-if "config.json":
-    try:
-        json.loads("config.json")
-    except:
-        pass
 
+# 如果有预设就读取
+if os.path.exists("config.json"):
+    t.get_config()
 
-
+# 欢迎
 @app.route('/api/welcome', methods = ['GET'])
 def welcome():
     return jsonify({"message": "道爷我成啦！"})
 
-# 由前端提供绝对路径
+# 添加目标路径
 @app.route("/api/target", method = ["PUT"])
 def load_filenames(path):
     '''输入目标文件夹'''
     t.target_path = path
     return "ok"
 
-# 载入模板
+# 添加模板
 @app.route("/api/template", method = ["PUT"])
 def load_template(template):
     '''输入模板'''
@@ -43,9 +41,9 @@ def check():
 # 打开文件
 @app.route("/api/open", method = ["GET"])
 def open_file():
-    return "this is test"
+    return "ok"
 
 # 导出名单
 @app.route("/api/export", method = ["GET"])
 def export():
-    return "nice"
+    return "ok"
