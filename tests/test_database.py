@@ -5,7 +5,7 @@ import unittest
 
 class Test_import_normal(unittest.TestCase):
     def setUp(self) -> None:
-        self.db = Database()
+        self.db = Database("demo.db")
         
     def test_make_insert_ok(self):
         '''测试插入语句构建函数是否正常工作'''
