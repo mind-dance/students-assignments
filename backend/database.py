@@ -11,7 +11,7 @@ class Database():
         self.root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.same_path = os.path.dirname(os.path.abspath(__file__))
         self.db_path = os.path.join(self.same_path, target_db)
-        self.sql_path = os.path.join(self.same_path, "sql")
+        self.data_path = os.path.join(self.same_path, "data")
         # 连接数据库
         self.con = sqlite3.connect(self.db_path)
         self.cur = self.con.cursor()

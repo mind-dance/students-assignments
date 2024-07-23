@@ -45,7 +45,7 @@ class Test_Tools_normal(unittest.TestCase):
             with open(item, 'w') as f:
                 f.write('This is a test file.')
         # 测试函数
-        get_file = self.t.get_all_files(temp_path)
+        get_file = self.t.read_filenames(temp_path)
         # 断言
         self.assertEqual(set(get_file), set(files))
     

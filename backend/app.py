@@ -17,35 +17,35 @@ if "config.json":
 
 
 
-@app.route('/api/welcome', methods=['GET'])
+@app.route('/api/welcome', methods = ['GET'])
 def welcome():
     return jsonify({"message": "道爷我成啦！"})
 
 # 由前端提供绝对路径
-@app.route("/api/target")
+@app.route("/api/target", method = ["PUT"])
 def load_filenames(path):
     '''输入目标文件夹'''
     t.target_path = path
     return "ok"
 
 # 载入模板
-@app.route("/api/template")
+@app.route("/api/template", method = ["PUT"])
 def load_template(template):
     '''输入模板'''
     t.template = template
     return "ok"
 
 # 查看作业完成情况，返回done，miss，error列表
-@app.route("/api/check")
+@app.route("/api/check", method = ["GET"])
 def check():
     return "ok"
 
 # 打开文件
-@app.route("/api/open")
+@app.route("/api/open", method = ["GET"])
 def open_file():
     return "this is test"
 
 # 导出名单
-@app.route("/api/export")
+@app.route("/api/export", method = ["GET"])
 def export():
     return "nice"
