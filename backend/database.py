@@ -9,9 +9,9 @@ class Database():
     def __init__(self, target_db = "database.db"):
         # 获取项目的根目录，以及其他高频的相对路径
         self.root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        self.data_path = os.path.join(self.root_path, "data")
-        self.db_path = os.path.join(self.data_path, target_db)
-        self.sql_path = os.path.join(self.data_path, "sql")
+        self.same_path = os.path.dirname(os.path.abspath(__file__))
+        self.db_path = os.path.join(self.same_path, target_db)
+        self.sql_path = os.path.join(self.same_path, "sql")
         # 连接数据库
         self.con = sqlite3.connect(self.db_path)
         self.cur = self.con.cursor()
@@ -52,9 +52,18 @@ class Database():
         if clauses:
             query = query + ", ".join(f"{field} = ?" for field in fields)
             query = query + " WHERE " + condition + " = ?"
-        
         return query
     
+    def make_select(self, table: str, fields: list[str], condition = None):
+        # 读取
+        if table not in self.valid_table:
+            raise ValueError("表名有误")
+        query = "SELECT "
+        query = query + ", ".join(f"{field}" for field in fields) + " FROM " + table
+        if condition:
+            query = query + " WHERE " + condition + " = ?"
+        return query
+
     # 构建查询语句
     def import_csv(self, csvfile, table):
         '''导入表格，需要负责异常捕捉'''
@@ -85,12 +94,25 @@ class Database():
             s_id.append(row[0])
         return s_id
     
-    # 获取学号
-    def get_s_object(self, sid_list):
-        '''根据学号查名字，返回s_dict，list[dict{key,key}]'''
-        s_dict = []
-        for i in sid_list:
-            sname = self.cur.execute("SELECT student_name FROM students WHERE student_id = ?",(i,)).fetchone()
-            # 从元组中取出sname
-            s_dict.append({"sid":i,"sname":sname[0]})
+    # 获取学生json对象
+    def get_s_object(self, sid):
+        '''获取学生json对象'''
+        s_dict = {}
+        sname = self.cur.execute("SELECT sname FROM students WHERE sid = ?",sid).fetchone()[0]
+        # 从元组中取出sname
+        s_dict["sid"] = sid
+        s_dict["sname"] = sname
         return s_dict
+    
+    # 根据学号查标注作业名
+    def get_s_hw(self, sid):
+        query = self.make_select("submits", ["hw"], "sid")
+        values = [sid]
+        hw = self.con.execute(query, values).fetchone()[0]
+        return hw
+
+    # 更新学生数据
+    def update_s(self, fields:list, condition, values):
+        query = self.make_update("submits", fields, condition)
+        self.con.execute(query, values)
+        self.con.commit()

@@ -7,20 +7,16 @@ db = Database()
 class Tools():
     def __init__(self):
         self.root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        self.same_path = os.path.dirname(os.path.abspath(__file__))
         self.target_path = ""
         self.template = "计科-${sname}-${sid}-实验报告.docx"
-        self.std_list = []
+        # self.std_list = []
 
     def get_root(self):
         return self.root_path
     
     def get_path(self, file):
         return os.path.join(self.target_path, file)
-    
-    def get_s_object(self, sid):
-        for i in self.std_list:
-            if sid == i["sid"]:
-                return i
 
     def _make_filename(self, sid):
         '''生成单个文件名'''
@@ -31,10 +27,10 @@ class Tools():
             filename = filename.replace("${" + ph + "}", val)
         return filename
     
-    def _rename_file(self, file, sid):
+    def _rename_file(self, file, filename):
         '''重命名已识别但不正确的文件名,s_dict为识别成功准备重命名的列表'''
         os.chdir(self.target_path)
-        os.rename(file, self._make_filename(sid))
+        os.rename(file, filename)
 
     # 第一步，读取文件
     def read_filenames(self,abs_path):
@@ -64,13 +60,22 @@ class Tools():
     def check_hw(self):
         filenames = self.read_filenames(self.target_path)
         error_list = []
+        # 从数据库读取所有作业名，保存为列表
+        query = db.make_select("submits", ["hw"])
+        out = db.cur.execute(query)
+        std_list = []
+        for row in out:
+            std_list.append(row[0])
+        # 检测单个文件名是否在标注名单中
         for file in filenames:
-            for i in self.std_list:
-                if file == i["hw"]:
-                    i["status"] = 1
-                    i["path"] = self.get_path(file)
-                else:
-                    error_list.append(file)
+            if file in std_list:
+                # 将提交数据写入数据库
+                path = self.get_path(file)
+                # 更新数据
+                db.update_s(["status", "path"], "hw", [1, path, file])
+            else:
+                error_list.append(file)
+        db.con.commit()
         return error_list
 
     # 第四步，修正文件名
@@ -79,11 +84,17 @@ class Tools():
         etc = []
         pat = re.compile(r"\d{12}")
         for file in error_list:
-            sid = re.findall(pat,file)
+            # 读取学号
+            sid = re.findall(pat,file)[0]
+            # 如果找到学号
             if sid:
-                s_object = self.get_s_object(sid)
-                self._rename_file(file, s_object)
-                s_object["status"] = 1 # type: ignore
+                # 查询该学号的标准文件名
+                hw = db.get_s_hw(sid)
+                # 重命名
+                self._rename_file(file, hw)
+                path = self.get_path(hw)
+                # 更新数据
+                db.update_s(["status", "path"], "sid", [1, path, sid])
             else:
                 etc.append(file)
         return etc

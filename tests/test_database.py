@@ -26,4 +26,3 @@ class Test_import_normal(unittest.TestCase):
         out = self.db.make_update("submits", field, condition)
         self.assertEqual(out, ans)
 
-    def

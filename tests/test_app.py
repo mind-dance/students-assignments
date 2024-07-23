@@ -49,7 +49,7 @@ class Test_app(unittest.TestCase):
         # 文件名设置：学号-姓名-作业标题.docx，后期可以优化数据库，让教师关联设置。
         config = ["sid", "sname", "aname"]
         # 准备收作业的文件夹
-        abs_path = os.path.join(self.db.data_path, self.t.aname)
+        abs_path = os.path.join(self.db.same_path, self.t.aname)
         # 清空文件夹
         if os.path.exists(abs_path):
             shutil.rmtree(abs_path)
